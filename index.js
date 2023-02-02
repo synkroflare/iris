@@ -214,6 +214,6 @@ app.patch("/product-reviews", async (req, res) => {
   }
 })
 
-app.listen(4000, (req, res) =>
+app.listen(443, (req, res) =>
   console.log("running on http://localhost:4000 " + process.version)
 )
