@@ -1,5 +1,7 @@
 const { PrismaClient } = require("@prisma/client")
 const express = require("express")
+const https = require("https")
+const fs = require("fs")
 const { getHTMLContent } = require("./functions/getHTMLContent")
 const {
   handleUncreatedReviewForms,
@@ -33,6 +35,11 @@ app.use(function (req, res, next) {
 })
 
 app.use(express.json())
+
+const options = {
+  key: fs.readFileSync("./openssl/auth/key.pem"),
+  cert: fs.readFileSync("./openssl/auth/cert.pem"),
+}
 
 const prisma = new PrismaClient()
 
@@ -214,6 +221,8 @@ app.patch("/product-reviews", async (req, res) => {
   }
 })
 
-app.listen(443, (req, res) =>
-  console.log("running on http://localhost:4000 " + process.version)
-)
+https
+  .createServer(options, app)
+  .listen(443, (req, res) =>
+    console.log("server online and using node version " + process.version)
+  )
