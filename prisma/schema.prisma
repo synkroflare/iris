@@ -14,11 +14,10 @@ model Store {
   id      Int       @id @default(autoincrement())
   name    String    @unique  
   email   String    @unique 
-  phone BigInt  
+  phone   Int      
   siteUrl String   @unique
   lastPayment DateTime?
   plan    String?
-
   reviews Review[]
   users User[]
 }
@@ -27,23 +26,35 @@ model User {
   id      Int      @id @default(autoincrement())
   idInStore Int
   storeId Int
-  name    String  
-  email   String   @unique  
-  image String 
+  firstName    String
+   lastName    String  
+  email   String?   @unique 
+  phoneNumber String? @unique 
+  image String?
 
   reviews Review[]  
   store Store @relation(fields: [storeId], references: [id])
+
 }
 
 model Review {
-    id      Int      @id @default(autoincrement())
+    id      String      @id @default(uuid())
     storeId Int
+    reviewIdInStore Int
     userId Int
-    productId Int
-    productInfo String?
-    rating  Int
+    userFirstName String
+    userLastName String?
+    productId String
+    productInfo String
+    rating  Int?
     message String?
     images  String[]
+
+    statusCreated Boolean @default(true)
+    statusSent Boolean  @default(false)
+    statusResponded Boolean  @default(false)
+    statusRejected Boolean  @default(false)
+    statusApproved Boolean  @default(false)
 
     user User @relation(fields: [userId], references: [id])
     store Store @relation(fields: [storeId], references: [id])

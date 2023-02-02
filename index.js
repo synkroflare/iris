@@ -1,6 +1,9 @@
 const { PrismaClient } = require("@prisma/client")
 const express = require("express")
 const { getHTMLContent } = require("./functions/getHTMLContent")
+const {
+  handleUncreatedReviewForms,
+} = require("./functions/handleUncreatedReviewForms")
 
 const app = express()
 
@@ -12,7 +15,7 @@ app.use(function (req, res, next) {
   // Request methods you wish to allow
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE, PROPFIND"
   )
 
   // Request headers you wish to allow
@@ -75,10 +78,16 @@ app.propfind("/product-reviews", async (req, res) => {
     const data = req.body
     const reviews = await prisma.review.findMany({
       where: {
+        id: data.id,
         productId: data.productId,
         storeId: data.storeId,
         userId: data.userId,
         rating: data.rating,
+        statusApproved: data.statusApproved,
+        statusCreated: data.statusCreated,
+        statusRejected: data.statusRejected,
+        statusResponded: data.statusResponded,
+        statusSent: data.statusSent,
       },
     })
 
@@ -89,6 +98,43 @@ app.propfind("/product-reviews", async (req, res) => {
         htmlObject: htmlObject,
       })
     )
+  } catch (error) {
+    res.send(error.message)
+  }
+})
+
+app.propfind("/store", async (req, res) => {
+  try {
+    const data = req.body
+
+    const store = await prisma.store.findFirst({
+      where: {
+        name: data.name,
+        siteUrl: data.siteUrl,
+        phone: data.phone,
+        id: data.id,
+        plan: data.plan,
+        lastPayment: data.lastPayment,
+      },
+      include: {
+        reviews: data.reviews,
+        users: data.users,
+      },
+    })
+
+    console.log(store)
+
+    res.send(JSON.stringify({ store }))
+  } catch (error) {
+    res.send(error.message)
+  }
+})
+
+app.post("/handle-new-ratings", async (req, res) => {
+  try {
+    const response = await handleUncreatedReviewForms(req.body)
+
+    res.send(JSON.stringify(response))
   } catch (error) {
     res.send(error.message)
   }
@@ -118,6 +164,7 @@ app.post("/product-reviews", async (req, res) => {
       data: {
         storeId: data.storeId,
         userId: data.userId,
+        userName: data.name,
         productInfo: data.productInfo,
         productId: data.productId,
         rating: data.rating,
@@ -131,6 +178,42 @@ app.post("/product-reviews", async (req, res) => {
   }
 })
 
-app.listen(3000, (req, res) =>
-  console.log("running on http://localhost:3000 " + process.version)
+app.patch("/product-reviews", async (req, res) => {
+  try {
+    const data = req.body
+    const review = await prisma.review.findFirst({
+      where: {
+        storeId: data.storeId,
+        id: data.id,
+      },
+    })
+    const newReview = await prisma.review.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        storeId: data.storeId,
+        userId: data.userId,
+        userFirstName: data.userFirstName,
+        userLastName: data.userLastName,
+        productInfo: data.productInfo,
+        productId: data.productId,
+        rating: data.rating,
+        message: data.message,
+        images: data.images,
+        statusCreated: data.statusCreated,
+        statusSent: data.statusSent,
+        statusResponded: data.statusResponded,
+        statusRejected: data.statusRejected,
+        statusApproved: data.statusApproved,
+      },
+    })
+    res.send(JSON.stringify(newReview))
+  } catch (error) {
+    res.send(error.message)
+  }
+})
+
+app.listen(4000, (req, res) =>
+  console.log("running on http://localhost:4000 " + process.version)
 )
