@@ -60,6 +60,7 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
   }
 
   for (let i = 0; i < storeApiInfo.objects.length; i++) {
+    console.log(orderIdsInDatabase, storeApiInfo.objects[i].numero)
     const check = orderIdsInDatabase.includes(storeApiInfo.objects[i].numero)
     if (check) {
       console.log("checked")
@@ -68,9 +69,6 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
     orderIds.push(storeApiInfo.objects[i].numero)
     storeApiInfoToCreate.push(storeApiInfo.objects[i])
   }
-
-  console.log("orderIds", orderIds)
-  console.log("store reviews", store?.reviews)
 
   if (orderIds.length <= 0) return "Tudo em dia."
 
@@ -132,6 +130,25 @@ async function createUncreatedRatings(orderId: number, storeInfo: any) {
       })
   })
 
+  const productInfo: any = await new Promise((resolve, reject) => {
+    fetch(
+      "https://api.awsli.com.br" +
+        orderInfo.itens[0].produto_pai +
+        "/?format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then(function (data) {
+        resolve(data)
+      })
+  })
+
   const fixedProductInfo = orderInfo.itens[0].nome.slice(
     orderInfo.itens[0].nome.indexOf("]") + 1
   )
@@ -143,8 +160,11 @@ async function createUncreatedRatings(orderId: number, storeInfo: any) {
       reviewIdInStore: orderId,
       productId: orderInfo.itens[0].sku,
       productInfo: fixedProductInfo,
+      userCity: clientInfo.enderecos[0].cidade,
+      userState: clientInfo.enderecos[0].estado,
       userId: 1,
       storeId: 1,
+      productImageUrl: productInfo.imagem_principal.grande,
     },
   })
 

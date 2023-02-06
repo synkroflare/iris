@@ -9,7 +9,7 @@ async function getRatings() {
     },
     body: JSON.stringify({
       storeId: 1,
-      productId: "YLRGJLSR7-telas-60x90cm",
+      productId: "Rose",
       statusApproved: true,
       statusRejected: false,
     }),

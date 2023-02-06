@@ -44,8 +44,11 @@ model Review {
     userId Int
     userFirstName String
     userLastName String?
+    userCity String
+    userState String
     productId String
     productInfo String
+    productImageUrl String
     rating  Int?
     message String?
     images  String[]

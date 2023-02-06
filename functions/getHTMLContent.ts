@@ -298,6 +298,8 @@ async function getPhotos(photoUrls: string[]) {
 async function createRatingElement(ratingData: any) {
   console.log(ratingData)
 
+  const dateTime = ratingData.createdAt
+
   const stars = await getStars(ratingData.rating)
   const photos = await getPhotos(ratingData.images)
 
@@ -325,7 +327,9 @@ async function createRatingElement(ratingData: any) {
           >
             <div class="iris-rating-entry-name">${ratingData.userFirstName} ${
     ratingData.userLastName
-  }</div>
+  } | ${ratingData.userCity ? ratingData.userCity : ""} - ${
+    ratingData.userState ? ratingData.userState : ""
+  } </div>
             <div
               class="iris-rating-entry-stars"
               style="display: flex; flex-direction: row"
@@ -333,7 +337,9 @@ async function createRatingElement(ratingData: any) {
               ${stars}
             </div>
             <div class="iris-rating-entry-product-info" style="color: gray">
-              ${ratingData.createdAt} | ${ratingData.productInfo}
+              ${dateTime.getDate()}/${
+    dateTime.getMonth() + 1
+  }/${dateTime.getFullYear()}   | ${ratingData.productInfo}
             </div>
             <div class="iris-rating-entry-comment" style="margin-top: 20px">
               ${ratingData.message == null ? "" : ratingData.message}

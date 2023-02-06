@@ -221,8 +221,12 @@ app.patch("/product-reviews", async (req, res) => {
   }
 })
 
-https
+/* https
   .createServer(options, app)
   .listen(443, (req, res) =>
     console.log("server online and using node version " + process.version)
-  )
+  ) */
+
+app.listen(443, (req, res) => {
+  console.log("server online on 443 and using node version " + process.version)
+})
