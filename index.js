@@ -38,11 +38,9 @@ app.use(express.json())
 
 const options = {
   key: fs.readFileSync(
-    "../../../etc/letsencrypt/live/alabarda.link/openssl/auth/privkey.pem"
+    "../../../etc/letsencrypt/live/alabarda.link/privkey.pem"
   ),
-  cert: fs.readFileSync(
-    "../../../etc/letsencrypt/live/alabarda.link/openssl/auth/cert.pem"
-  ),
+  cert: fs.readFileSync("../../../etc/letsencrypt/live/alabarda.link/cert.pem"),
 }
 
 const prisma = new PrismaClient()
