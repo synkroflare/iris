@@ -162,6 +162,8 @@ async function createUncreatedRatings(orderId: number, storeInfo: any) {
       productInfo: fixedProductInfo,
       userCity: clientInfo.enderecos[0].cidade,
       userState: clientInfo.enderecos[0].estado,
+      userMail: clientInfo.email,
+      userPhone: clientInfo.telefone_celular,
       userId: 1,
       storeId: 1,
       productImageUrl: productInfo.imagem_principal.grande,

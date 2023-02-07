@@ -46,6 +46,8 @@ model Review {
     userLastName String?
     userCity String
     userState String
+    userMail String
+    userPhone String
     productId String
     productInfo String
     productImageUrl String
