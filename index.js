@@ -87,6 +87,7 @@ app.propfind("/product-reviews", async (req, res) => {
     const data = req.body
     const reviews = await prisma.review.findMany({
       where: {
+        id: data.id,
         storeId: data.storeId,
         productInfo: data.productInfo,
       },
