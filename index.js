@@ -36,12 +36,12 @@ app.use(function (req, res, next) {
 
 app.use(express.json())
 
-const options = {
+/* const options = {
   key: fs.readFileSync(
     "../../../etc/letsencrypt/live/alabarda.link/privkey.pem"
   ),
   cert: fs.readFileSync("../../../etc/letsencrypt/live/alabarda.link/cert.pem"),
-}
+} */
 
 const prisma = new PrismaClient()
 
@@ -223,10 +223,12 @@ app.patch("/product-reviews", async (req, res) => {
   }
 })
 
-https
+/* https
   .createServer(options, app)
   .listen(3000, (req, res) =>
     console.log(
       "https server online on 3000 and using node version " + process.version
     )
-  )
+  ) */
+
+app.listen(3000, () => console.log("network online"))

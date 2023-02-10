@@ -31,8 +31,9 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
   })
 
   const storeApiInfo: any = await new Promise((resolve, reject) => {
+    const apiLimit = 50
     fetch(
-      "https://api.awsli.com.br/v1/pedido/search/?situacao_id=14&format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
+      "https://api.awsli.com.br/v1/pedido/search/?situacao_id=14&limit=50&format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
       {
         method: "GET",
         headers: {
@@ -43,7 +44,30 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
     )
       .then((response) => response.json())
       .then(function (data) {
-        resolve(data)
+        const offset = data.meta.total_count - apiLimit
+        if (offset <= 0) {
+          resolve(data)
+          return
+        }
+
+        console.log("going to the next get request")
+
+        fetch(
+          "https://api.awsli.com.br/v1/pedido/search/?situacao_id=14&limit=50&offset=" +
+            offset +
+            "&format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then(function (data) {
+            resolve(data)
+          })
       })
   })
 
@@ -92,6 +116,9 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
 }
 
 async function createUncreatedRatings(orderId: number, storeInfo: any) {
+  console.log(storeInfo.cliente, "fetch1")
+  console.log(storeInfo.resource_uri, "fetch2")
+
   const clientInfo: any = await new Promise((resolve, reject) => {
     fetch(
       "https://api.awsli.com.br" +
@@ -130,10 +157,16 @@ async function createUncreatedRatings(orderId: number, storeInfo: any) {
       })
   })
 
+  console.log(orderInfo.itens[0], "fetch3")
+
+  const apiProductInfo = orderInfo.itens[0].produto_pai
+    ? orderInfo.itens[0].produto_pai
+    : orderInfo.itens[0].produto
+
   const productInfo: any = await new Promise((resolve, reject) => {
     fetch(
       "https://api.awsli.com.br" +
-        orderInfo.itens[0].produto_pai +
+        apiProductInfo +
         "/?format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
       {
         method: "GET",
