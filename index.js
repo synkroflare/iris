@@ -90,6 +90,11 @@ app.propfind("/product-reviews", async (req, res) => {
         id: data.id,
         storeId: data.storeId,
         productInfo: data.productInfo,
+        statusApproved: data.statusApproved,
+        statusRejected: data.statusRejected,
+        statusResponded: data.statusResponded,
+        statusSent: data.statusSent,
+        statusCreated: data.statusCreated,
       },
     })
 
