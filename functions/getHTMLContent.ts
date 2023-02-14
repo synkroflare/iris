@@ -267,7 +267,7 @@ async function getStars(rating: number) {
     for (let i = 0; i < rating; i++) {
       stars += `
       <img
-                src="https://www.svgrepo.com/show/474084/star.svg"
+                src="https://www.svgrepo.com/show/407521/star.svg"
                 alt=""
                 style="height: 20px"
               />
