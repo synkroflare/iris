@@ -252,7 +252,7 @@ export async function getHTMLContent(objects: reviews[]) {
         "
       >
         <span style="padding: 15px"
-          >Avaliações obtidas pelo sistema Iris Alabarda.</span
+          >Avaliações obtidas pelo sistema Arauta Alabarda.</span
         >
       </div>
     </div>
