@@ -60,35 +60,35 @@ export async function getHTMLContent(objects: reviews[]) {
             </div>
               <div class="">
                 <img
-                  src="https://www.svgrepo.com/show/474084/star.svg"
+                  src="https://www.svgrepo.com/show/407521/star.svg"
                   alt=""
                   style="height: 30px"
                 />
               </div>
               <div class="">
                 <img
-                  src="https://www.svgrepo.com/show/474084/star.svg"
+                  src="https://www.svgrepo.com/show/407521/star.svg"
                   alt=""
                   style="height: 30px"
                 />
               </div>
               <div class="">
                 <img
-                  src="https://www.svgrepo.com/show/474084/star.svg"
+                  src="https://www.svgrepo.com/show/407521/star.svg"
                   alt=""
                   style="height: 30px"
                 />
               </div>
               <div class="">
                 <img
-                  src="https://www.svgrepo.com/show/474084/star.svg"
+                  src="https://www.svgrepo.com/show/407521/star.svg"
                   alt=""
                   style="height: 30px"
                 />
               </div>
               <div class="">
                 <img
-                  src="https://www.svgrepo.com/show/474084/star.svg"
+                  src="https://www.svgrepo.com/show/407521/star.svg"
                   alt=""
                   style="height: 30px"
                 />
