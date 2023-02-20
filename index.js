@@ -213,6 +213,7 @@ app.patch("/product-reviews", async (req, res) => {
         statusResponded: data.statusResponded,
         statusRejected: data.statusRejected,
         statusApproved: data.statusApproved,
+        statusTrashed: data.statusTrashed,
       },
     })
     res.send(JSON.stringify(newReview))

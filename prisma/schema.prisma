@@ -60,6 +60,7 @@ model Review {
     statusResponded Boolean  @default(false)
     statusRejected Boolean  @default(false)
     statusApproved Boolean  @default(false)
+    statusTrashed Boolean  @default(false)
 
     user User @relation(fields: [userId], references: [id])
     store Store @relation(fields: [storeId], references: [id])
