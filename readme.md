@@ -4,6 +4,7 @@
 
 - Install the dependencies: run `npm install` in project terminal
 - Configure the environment variables
+- Run the setup script: run `npm run setup` in project terminal
 
 ## How to configure your environment variables?
 
@@ -21,4 +22,3 @@ Install the dependencies
 ## How to run the project?
 
 - Run the project: run `npm run dev` in project terminal
-- Run the migrations: run `npx prisma migrate dev` in project terminal
