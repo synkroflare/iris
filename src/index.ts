@@ -66,14 +66,7 @@ app.post("/user/create", async (req: Request, res: Response) => {
       res.send("User already exists")
     }
     const newUser = await prisma.user.create({
-      data: {
-        idInStore: data.idInStore,
-        storeId: data.storeId,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        image: data.image,
-      },
+      data,
     })
 
     res.send(JSON.stringify(newUser))
@@ -158,14 +151,7 @@ app.post("/product-reviews", async (req: Request, res: Response) => {
     })
     if (!user) {
       await prisma.user.create({
-        data: {
-          idInStore: data.idInStore,
-          storeId: data.storeId,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          image: data.image,
-        },
+        data,
       })
     }
     const newReview = await prisma.review.create({ data })
@@ -188,23 +174,7 @@ app.patch("/product-reviews", async (req: Request, res: Response) => {
       where: {
         id: data.id,
       },
-      data: {
-        storeId: data.storeId,
-        userId: data.userId,
-        userFirstName: data.userFirstName,
-        userLastName: data.userLastName,
-        productInfo: data.productInfo,
-        productId: data.productId,
-        rating: data.rating,
-        message: data.message,
-        images: data.images,
-        statusCreated: data.statusCreated,
-        statusSent: data.statusSent,
-        statusResponded: data.statusResponded,
-        statusRejected: data.statusRejected,
-        statusApproved: data.statusApproved,
-        statusTrashed: data.statusTrashed,
-      },
+      data,
     })
     res.send(JSON.stringify(newReview))
   } catch (error: any) {
