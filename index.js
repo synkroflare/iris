@@ -99,6 +99,8 @@ app.propfind("/product-reviews", async (req, res) => {
     })
 
     const htmlObject = await getHTMLContent(reviews)
+
+    console.log(reviews)
     res.send(
       JSON.stringify({
         reviews: reviews,
@@ -128,8 +130,6 @@ app.propfind("/store", async (req, res) => {
         users: data.users,
       },
     })
-
-    console.log(store)
 
     res.send(JSON.stringify({ store }))
   } catch (error) {
@@ -226,7 +226,7 @@ https
   .createServer(options, app)
   .listen(3000, (req, res) =>
     console.log(
-      "Arauta v0.0.2 https server online on 3000 and using node version " +
+      "Arauta v0.0.3 https server online on 3000 and using node version " +
         process.version
     )
   )
