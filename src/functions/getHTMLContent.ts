@@ -7,11 +7,15 @@ export async function getHTMLContent(objects: reviews[]) {
   let ratings = ""
   let ratingMedian: number = 0
 
-  for (let i = 0; i < objects.length; i++) {
-    const newRating = await createRatingElement(objects[i])
-    ratingsArray.push(newRating)
-    ratingMedian += objects[i].rating
-    ratings += newRating
+  if (objects.length > 0) {
+    objects.forEach(async (object) => {
+      const newRating = await createRatingElement(object)
+      ratingsArray.push(newRating)
+      if (object.rating) {
+        ratingMedian += object.rating
+      }
+      ratings += newRating
+    })
   }
 
   ratingMedian = ratingMedian / objects.length

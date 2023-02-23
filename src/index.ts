@@ -1,16 +1,15 @@
-const { PrismaClient } = require("@prisma/client")
-const express = require("express")
-const https = require("https")
-const fs = require("fs")
-const { getHTMLContent } = require("./functions/getHTMLContent")
-const {
-  handleUncreatedReviewForms,
-} = require("./functions/handleUncreatedReviewForms")
+import express, { Request, Response, NextFunction } from "express"
+
+import { PrismaClient } from "@prisma/client"
+import https from "https"
+import fs from "fs"
+import { getHTMLContent } from "./functions/getHTMLContent"
+import { handleUncreatedReviewForms } from "./functions/handleUncreatedReviewForms"
 
 const app = express()
 
 // Add headers before the routes are defined
-app.use(function (req, res, next) {
+app.use(function (req: Request, res: Response, next: NextFunction) {
   // Website you wish to allow to connect
   res.setHeader("Access-Control-Allow-Origin", "*")
 
@@ -45,16 +44,16 @@ const options = {
 
 const prisma = new PrismaClient()
 
-app.get("/", async (req, res) => {
+app.get("/", async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findMany()
     res.send(JSON.stringify(user))
-  } catch (error) {
+  } catch (error: any) {
     res.send(error.message)
   }
 })
 
-app.post("/user/create", async (req, res) => {
+app.post("/user/create", async (req: Request, res: Response) => {
   try {
     const data = req.body
     const user = await prisma.user.findFirst({
@@ -70,19 +69,20 @@ app.post("/user/create", async (req, res) => {
       data: {
         idInStore: data.idInStore,
         storeId: data.storeId,
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         image: data.image,
       },
     })
 
     res.send(JSON.stringify(newUser))
-  } catch (error) {
+  } catch (error: any) {
     res.send(error.message)
   }
 })
 
-app.propfind("/product-reviews", async (req, res) => {
+app.propfind("/product-reviews", async (req: Request, res: Response) => {
   try {
     const data = req.body
     const reviews = await prisma.review.findMany({
@@ -107,12 +107,12 @@ app.propfind("/product-reviews", async (req, res) => {
         htmlObject: htmlObject,
       })
     )
-  } catch (error) {
+  } catch (error: any) {
     res.send(error.message)
   }
 })
 
-app.propfind("/store", async (req, res) => {
+app.propfind("/store", async (req: Request, res: Response) => {
   try {
     const data = req.body
 
@@ -132,22 +132,22 @@ app.propfind("/store", async (req, res) => {
     })
 
     res.send(JSON.stringify({ store }))
-  } catch (error) {
+  } catch (error: any) {
     res.send(error.message)
   }
 })
 
-app.post("/handle-new-ratings", async (req, res) => {
+app.post("/handle-new-ratings", async (req: Request, res: Response) => {
   try {
     const response = await handleUncreatedReviewForms(req.body)
 
     res.send(JSON.stringify(response))
-  } catch (error) {
+  } catch (error: any) {
     res.send(error.message)
   }
 })
 
-app.post("/product-reviews", async (req, res) => {
+app.post("/product-reviews", async (req: Request, res: Response) => {
   try {
     const data = req.body
     const user = await prisma.user.findFirst({
@@ -161,31 +161,21 @@ app.post("/product-reviews", async (req, res) => {
         data: {
           idInStore: data.idInStore,
           storeId: data.storeId,
-          name: data.name,
+          firstName: data.firstName,
+          lastName: data.lastName,
           email: data.email,
           image: data.image,
         },
       })
     }
-    const newReview = await prisma.review.create({
-      data: {
-        storeId: data.storeId,
-        userId: data.userId,
-        userName: data.name,
-        productInfo: data.productInfo,
-        productId: data.productId,
-        rating: data.rating,
-        message: data.message,
-        images: data.images,
-      },
-    })
+    const newReview = await prisma.review.create({ data })
     res.send(JSON.stringify(newReview))
-  } catch (error) {
+  } catch (error: any) {
     res.send(error.message)
   }
 })
 
-app.patch("/product-reviews", async (req, res) => {
+app.patch("/product-reviews", async (req: Request, res: Response) => {
   try {
     const data = req.body
     const review = await prisma.review.findFirst({
@@ -217,14 +207,14 @@ app.patch("/product-reviews", async (req, res) => {
       },
     })
     res.send(JSON.stringify(newReview))
-  } catch (error) {
+  } catch (error: any) {
     res.send(error.message)
   }
 })
 
 https
   .createServer(options, app)
-  .listen(3000, (req, res) =>
+  .listen(3000, () =>
     console.log(
       "Arauta v0.0.3 https server online on 3000 and using node version " +
         process.version
