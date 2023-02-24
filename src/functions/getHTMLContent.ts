@@ -17,7 +17,6 @@ export async function getHTMLContent(objects: reviews[]) {
       }
 
       ratings += newRating
-      console.log("ratingsHH: ", ratings)
     })
   }
 
