@@ -266,7 +266,7 @@ export async function getHTMLContent(objects: reviews[]) {
 
   const starsHTMLObject = `
 
-    <div class='iris-stars-top'>
+    <a class='iris-stars-top' href='#iris-outerbox'>
     <div
     class="iris-star-rating"
     style="display: flex; flex-direction: row; margin-top: 10px; justify-content: space-between;align-items: center;
@@ -332,7 +332,7 @@ export async function getHTMLContent(objects: reviews[]) {
             }           
         </span>
   </div>
-    </div>
+    </a>
     
     `
 
