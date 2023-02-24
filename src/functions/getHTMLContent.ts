@@ -267,7 +267,56 @@ export async function getHTMLContent(objects: reviews[]) {
   const starsHTMLObject = `
 
     <div class='iris-stars-top'>
-        -
+    <div
+    class="iris-star-rating"
+    style="display: flex; flex-direction: column"
+  >
+    <span>${ratingMedian ? ratingMedian + " de 5" : ""}</span>
+    <div
+      class="stars"
+      style="display: flex; flex-direction: row; gap: 2px; position: relative"
+    >
+    <div class="star-mask" style="position: absolute; top:0; right:0; z-index: 50; height: 100%; background-color: white; width: ${
+      starMaskWidth ? starMaskWidth : "100%"
+    }">
+    </div>
+      <div class="">
+        <img
+          src="https://www.svgrepo.com/show/407521/star.svg"
+          alt=""
+          style="height: 30px"
+        />
+      </div>
+      <div class="">
+        <img
+          src="https://www.svgrepo.com/show/407521/star.svg"
+          alt=""
+          style="height: 30px"
+        />
+      </div>
+      <div class="">
+        <img
+          src="https://www.svgrepo.com/show/407521/star.svg"
+          alt=""
+          style="height: 30px"
+        />
+      </div>
+      <div class="">
+        <img
+          src="https://www.svgrepo.com/show/407521/star.svg"
+          alt=""
+          style="height: 30px"
+        />
+      </div>
+      <div class="">
+        <img
+          src="https://www.svgrepo.com/show/407521/star.svg"
+          alt=""
+          style="height: 30px"
+        />
+      </div>
+    </div>
+  </div>
     </div>
     
     `
