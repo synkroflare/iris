@@ -326,7 +326,10 @@ export async function getHTMLContent(objects: reviews[]) {
     font-size: medium;
     font-weight: bold;
 ">
-            ${objects.length} Avaliações            
+       
+            ${
+              objects.length > 0 ? objects.length + " Avaliações" : ""
+            }           
         </span>
   </div>
     </div>
