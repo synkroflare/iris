@@ -269,9 +269,12 @@ export async function getHTMLContent(objects: reviews[]) {
     <div class='iris-stars-top'>
     <div
     class="iris-star-rating"
-    style="display: flex; flex-direction: column"
+    style="display: flex; flex-direction: row; margin-top: 10px; justify-content: space-between;align-items: center;
+    gap: 20px
+
+;"
   >
-    <span>${ratingMedian ? ratingMedian + " de 5" : ""}</span>
+    
     <div
       class="stars"
       style="display: flex; flex-direction: row; gap: 2px; position: relative"
@@ -284,38 +287,48 @@ export async function getHTMLContent(objects: reviews[]) {
         <img
           src="https://www.svgrepo.com/show/407521/star.svg"
           alt=""
-          style="height: 30px"
+          style="height: 25px"
         />
       </div>
       <div class="">
         <img
           src="https://www.svgrepo.com/show/407521/star.svg"
           alt=""
-          style="height: 30px"
+          style="height: 25px"
         />
       </div>
       <div class="">
         <img
           src="https://www.svgrepo.com/show/407521/star.svg"
           alt=""
-          style="height: 30px"
+          style="height: 25px"
         />
       </div>
       <div class="">
         <img
           src="https://www.svgrepo.com/show/407521/star.svg"
           alt=""
-          style="height: 30px"
+          style="height: 25px"
         />
       </div>
       <div class="">
         <img
           src="https://www.svgrepo.com/show/407521/star.svg"
           alt=""
-          style="height: 30px"
+          style="height: 25px"
         />
       </div>
+      
+      <span>${ratingMedian ? ratingMedian + " de 5" : ""}</span>
+
     </div>
+    <span style="
+    font-size: medium;
+    font-weight: bold;
+">
+            ${objects.length} Avaliações
+            
+        </span>
   </div>
     </div>
     
