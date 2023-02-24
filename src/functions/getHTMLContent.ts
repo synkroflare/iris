@@ -320,7 +320,9 @@ export async function getHTMLContent(objects: reviews[]) {
       </div>
     </div>
 
-    <span>${ratingMedian ? ratingMedian + " de 5" : ""}</span>
+    <span style="font-size: medium; font-weight: bold;">${
+      ratingMedian ? ratingMedian + " de 5" : ""
+    }</span>
 
     <span style="
     font-size: medium;
