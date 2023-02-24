@@ -94,7 +94,7 @@ app.propfind("/product-reviews", async (req: Request, res: Response) => {
 
     const htmlObject = await getHTMLContent(reviews)
 
-    console.log(reviews)
+    console.log(htmlObject)
     res.send(
       JSON.stringify({
         reviews: reviews,

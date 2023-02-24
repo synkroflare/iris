@@ -10,7 +10,7 @@ export async function getHTMLContent(objects: reviews[]) {
   if (objects.length > 0) {
     objects.forEach(async (object) => {
       const newRating = await createRatingElement(object)
-      console.log("newrating", newRating)
+
       ratingsArray.push(newRating)
       if (object.rating) {
         ratingMedian += object.rating
@@ -18,8 +18,6 @@ export async function getHTMLContent(objects: reviews[]) {
       ratings += newRating
     })
   }
-
-  console.log("ratings:", ratings)
 
   ratingMedian = ratingMedian / objects.length
   let starMaskWidth: string = (1 - ratingMedian / 5) * 100 + "%"
@@ -303,8 +301,6 @@ async function getPhotos(photoUrls: string[]) {
 }
 
 async function createRatingElement(ratingData: any) {
-  console.log(ratingData)
-
   const dateTime = ratingData.createdAt
 
   const stars = await getStars(ratingData.rating)
