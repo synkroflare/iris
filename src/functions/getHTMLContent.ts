@@ -1,26 +1,27 @@
 import { reviews } from "../types"
 
+async function getRatingsData(objects: reviews[]) {
+  let ratings = ""
+  if (objects.length > 0) {
+    objects.forEach(async (object) => {
+      const newRating = await createRatingElement(object)
+
+      /* ratingsArray.push(newRating)
+      if (object.rating) {
+        ratingMedian += object.rating
+      } */
+      ratings += newRating
+    })
+  }
+  return ratings
+}
+
 export async function getHTMLContent(objects: reviews[]) {
   const ratingsArray: string[] = []
   const ratingScores: number[] = []
 
-  let ratings = ""
+  const ratings: string = await getRatingsData(objects)
   let ratingMedian: number = 0
-
-  if (objects.length > 0) {
-    console.log("h")
-    objects.forEach(async (object) => {
-      const newRating = await createRatingElement(object)
-
-      ratingsArray.push(newRating)
-      if (object.rating) {
-        ratingMedian += object.rating
-      }
-
-      ratings += newRating
-      console.log("summ: ", ratings)
-    })
-  }
 
   console.log("ratings: ", ratings)
 
