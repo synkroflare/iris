@@ -264,7 +264,20 @@ export async function getHTMLContent(objects: reviews[]) {
     </div>
 `
 
-  return irisOuterHTML
+  const starsHTMLObject = `
+
+    <div class='iris-stars-top'>
+        -
+    </div>
+    
+    `
+
+  const htmlObjects = {
+    htmlObject: irisOuterHTML,
+    starsHTMLObject: starsHTMLObject,
+  }
+
+  return htmlObjects
 }
 
 async function getStars(rating: number) {

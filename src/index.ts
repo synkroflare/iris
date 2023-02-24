@@ -92,12 +92,16 @@ app.propfind("/product-reviews", async (req: Request, res: Response) => {
       },
     })
 
-    const htmlObject = await getHTMLContent(reviews)
+    const htmlObjects = await getHTMLContent(reviews)
+
+    const htmlObject = htmlObjects.htmlObject
+    const starsHTMLObject = htmlObjects.starsHTMLObject
 
     res.send(
       JSON.stringify({
         reviews: reviews,
         htmlObject: htmlObject,
+        starsHTMLObject: starsHTMLObject,
       })
     )
   } catch (error: any) {
@@ -164,12 +168,7 @@ app.post("/product-reviews", async (req: Request, res: Response) => {
 app.patch("/product-reviews", async (req: Request, res: Response) => {
   try {
     const data = req.body
-    const review = await prisma.review.findFirst({
-      where: {
-        storeId: data.storeId,
-        id: data.id,
-      },
-    })
+
     const newReview = await prisma.review.update({
       where: {
         id: data.id,
