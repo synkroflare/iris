@@ -318,16 +318,15 @@ export async function getHTMLContent(objects: reviews[]) {
           style="height: 25px"
         />
       </div>
-      
-      <span>${ratingMedian ? ratingMedian + " de 5" : ""}</span>
-
     </div>
+
+    <span>${ratingMedian ? ratingMedian + " de 5" : ""}</span>
+
     <span style="
     font-size: medium;
     font-weight: bold;
 ">
-            ${objects.length} Avaliações
-            
+            ${objects.length} Avaliações            
         </span>
   </div>
     </div>
