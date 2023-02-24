@@ -17,8 +17,9 @@ export async function getHTMLContent(objects: reviews[]) {
       if (object.rating) {
         ratingMedian += object.rating
       }
-      console.log("newRating: ", newRating)
+
       ratings += newRating
+      console.log("ratingsHH: ", ratings)
     })
   }
 
