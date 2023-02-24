@@ -7,8 +7,11 @@ export async function getHTMLContent(objects: reviews[]) {
   let ratings = ""
   let ratingMedian: number = 0
 
+  console.log("objects: ", objects)
+
   if (objects.length > 0) {
     objects.forEach(async (object) => {
+      console.log("object: ", object)
       const newRating = await createRatingElement(object)
 
       ratingsArray.push(newRating)
