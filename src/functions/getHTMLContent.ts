@@ -19,6 +19,8 @@ export async function getHTMLContent(objects: reviews[]) {
     })
   }
 
+  console.log("ratings: ", ratings)
+
   ratingMedian = ratingMedian / objects.length
   let starMaskWidth: string = (1 - ratingMedian / 5) * 100 + "%"
 
