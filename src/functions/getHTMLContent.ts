@@ -8,6 +8,7 @@ export async function getHTMLContent(objects: reviews[]) {
   let ratingMedian: number = 0
 
   if (objects.length > 0) {
+    console.log("h")
     objects.forEach(async (object) => {
       const newRating = await createRatingElement(object)
 
@@ -17,6 +18,7 @@ export async function getHTMLContent(objects: reviews[]) {
       }
 
       ratings += newRating
+      console.log("summ: ", ratings)
     })
   }
 
