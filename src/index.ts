@@ -9,15 +9,10 @@ import "dotenv/config"
 
 const app = express()
 
-console.log(process.env.ALLOWED_HOSTS)
-
 // Add headers before the routes are defined
 app.use(function (req: Request, res: Response, next: NextFunction) {
   // Website you wish to allow to connect
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    process.env.ALLOWED_HOSTS as string
-  )
+  res.setHeader("Access-Control-Allow-Origin", "*")
 
   // Request methods you wish to allow
   res.setHeader(
@@ -41,12 +36,12 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 
 app.use(express.json())
 
-/* const options = {
+const options = {
   key: fs.readFileSync(
     "../../../etc/letsencrypt/live/alabarda.link/privkey.pem"
   ),
   cert: fs.readFileSync("../../../etc/letsencrypt/live/alabarda.link/cert.pem"),
-} */
+}
 
 const prisma = new PrismaClient()
 
@@ -190,11 +185,11 @@ app.patch("/product-reviews", async (req: Request, res: Response) => {
 
 app.listen(4000)
 
-/* https
+https
   .createServer(options, app)
   .listen(3000, () =>
     console.log(
       "Arauta v0.0.3 https server online on 3000 and using node version " +
         process.version
     )
-  ) */
+  )
