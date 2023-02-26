@@ -222,7 +222,7 @@ async function getLIApiData(offset: number) {
       }
     )
       .then((response) => response.json())
-      .then(function (data) {
+      .then(async function (data) {
         const remainingOrders = data.meta.total_count - (apiLimit + offset)
         if (remainingOrders <= 0) {
           resolve(data)
@@ -231,7 +231,8 @@ async function getLIApiData(offset: number) {
           "Iterating again in getLIApiData with remainingOrders: ",
           remainingOrders
         )
-        getLIApiData(apiLimit + offset)
+        const newData = data + (await getLIApiData(apiLimit + offset))
+        resolve(newData)
       })
   })
 }
