@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 import "dotenv/config"
 import express, { NextFunction, Request, Response } from "express"
+import "reflect-metadata"
 import { getHTMLContent } from "./helpers/getHTMLContent"
 import { handleUncreatedReviewForms } from "./helpers/handleUncreatedReviewForms"
 import { startContainer } from "./infra/container"
