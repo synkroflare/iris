@@ -3,18 +3,20 @@ import { createRatingElement } from "./createRatingElement"
 
 export const getHTMLContent = async (objects: reviews[]) => {
   let ratingMedian: number = 0
+  const preRatings = await Promise.allSettled(
+    objects.map((object) => {
+      if (!object) return
+      if (object.rating) {
+        ratingMedian += object.rating
+      }
+      return createRatingElement(object)
+    })
+  )
 
-  const ratings = (
-    await Promise.allSettled(
-      objects.map((object) => {
-        if (!object) return
-        if (object.rating) {
-          ratingMedian += object.rating
-        }
-        return createRatingElement(object)
-      })
-    )
-  ).join("")
+  const ratings = preRatings.map((rating: any) => {
+    return rating.value
+  })
+
   ratingMedian = ratingMedian / objects.length
   const starMaskWidth =
     objects.length === 0 ? "100%" : (1 - ratingMedian / 5) * 100 + "%"
@@ -329,6 +331,7 @@ export const getHTMLContent = async (objects: reviews[]) => {
     </a>
     
     `
+
   return {
     htmlObject: irisOuterHTML,
     starsHTMLObject: starsHTMLObject,
