@@ -53,6 +53,7 @@ model Review {
     productImageUrl String
     rating  Int?
     message String?
+    shopkeeperComment String?
     images  String[]
 
     statusCreated Boolean @default(true)
@@ -61,6 +62,7 @@ model Review {
     statusRejected Boolean  @default(false)
     statusApproved Boolean  @default(false)
     statusTrashed Boolean  @default(false)
+    statusCommented Boolean @default(false)
 
     user User @relation(fields: [userId], references: [id])
     store Store @relation(fields: [storeId], references: [id])

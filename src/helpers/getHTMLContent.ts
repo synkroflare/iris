@@ -1,31 +1,24 @@
 import { reviews } from "../types"
+import { createRatingElement } from "./createRatingElement"
 
-export async function getHTMLContent(objects: reviews[]) {
-  const ratingsArray: string[] = []
-  const ratingScores: number[] = []
-
-  let ratings = ""
+export const getHTMLContent = async (objects: reviews[]) => {
   let ratingMedian: number = 0
 
-  for (let i = 0; i < objects.length; i++) {
-    const newRating = await createRatingElement(objects[i])
-
-    ratingsArray.push(newRating)
-    if (objects[i] && objects[i].rating) {
-      ratingMedian += objects[i].rating!
-    }
-
-    ratings += newRating
-  }
-
-  console.log("ratings: ", ratings)
-
+  const ratings = (
+    await Promise.allSettled(
+      objects.map((object) => {
+        if (!object) return
+        if (object.rating) {
+          ratingMedian += object.rating
+        }
+        return createRatingElement(object)
+      })
+    )
+  ).join("")
   ratingMedian = ratingMedian / objects.length
-  let starMaskWidth: string = (1 - ratingMedian / 5) * 100 + "%"
+  const starMaskWidth =
+    objects.length === 0 ? "100%" : (1 - ratingMedian / 5) * 100 + "%"
 
-  if (objects.length === 0) {
-    starMaskWidth = "100%"
-  }
   const irisOuterHTML = `
 <div  
       id="iris-outerbox"
@@ -263,7 +256,6 @@ export async function getHTMLContent(objects: reviews[]) {
       </div>
     </div>
 `
-
   const starsHTMLObject = `
 
     <a class='iris-stars-top' href='#iris-outerbox'>
@@ -337,115 +329,8 @@ export async function getHTMLContent(objects: reviews[]) {
     </a>
     
     `
-
-  const htmlObjects = {
+  return {
     htmlObject: irisOuterHTML,
     starsHTMLObject: starsHTMLObject,
   }
-
-  return htmlObjects
-}
-
-async function getStars(rating: number) {
-  return new Promise((resolve, reject) => {
-    let stars = ""
-    for (let i = 0; i < rating; i++) {
-      stars += `
-      <img
-                src="https://www.svgrepo.com/show/407521/star.svg"
-                alt=""
-                style="height: 20px"
-              />
-      `
-    }
-    resolve(stars)
-  })
-}
-
-async function getPhotos(photoUrls: string[]) {
-  return new Promise((resolve, reject) => {
-    let photos = ""
-    for (let i = 0; i < photoUrls.length; i++) {
-      photos += `
-      <div
-                class=""
-                style="height: 150px; "
-              >
-              <a class='iris-rating-entry-image' onclick="handleImages(this)" style="cursor:pointer">
-              <img  src="${photoUrls[i]}" style="height: 100%"/>
-               </a></div>
-      `
-    }
-    resolve(photos)
-  })
-}
-
-async function createRatingElement(ratingData: any) {
-  const dateTime = ratingData.createdAt
-
-  const stars = await getStars(ratingData.rating)
-  const photos = await getPhotos(ratingData.images)
-
-  let hasComment, hasPhoto
-
-  if (ratingData.message) hasComment = "true"
-  if (ratingData.images.length > 0) hasPhoto = "true"
-
-  const ratingHTML = `
-  <div
-            class="iris-rating-entry"
-            id="iris-rating-entry-1"
-            style="
-              border: 1px solid lightgray;
-              border-radius: 5px;
-              padding: 11px;
-              display: flex;
-              flex-direction: column;
-              gap: 10px;
-            "
-            data-rating="${ratingData.rating}"
-            data-hasComment="${hasComment}"
-            data-hasPhoto="${hasPhoto}"
-
-          >
-            <div class="iris-rating-entry-name">${ratingData.userFirstName} ${
-    ratingData.userLastName
-  } | ${ratingData.userCity ? ratingData.userCity : ""} - ${
-    ratingData.userState ? ratingData.userState : ""
-  } </div>
-            <div
-              class="iris-rating-entry-stars"
-              style="display: flex; flex-direction: row"
-            >
-              ${stars}
-            </div>
-            <div class="iris-rating-entry-product-info" style="color: gray">
-              ${dateTime.getDate()}/${
-    dateTime.getMonth() + 1
-  }/${dateTime.getFullYear()}   | ${ratingData.productInfo}
-            </div>
-            <div class="iris-rating-entry-comment" style="margin-top: 20px">
-              ${ratingData.message == null ? "" : ratingData.message}
-            </div>
-            <div
-              class="iris-rating-entry-photos"
-              style="
-                display: flex;
-                flex-direction: row;
-                gap: 10px;
-                margin-top: 25px;
-              "
-            >
-              ${photos}
-              
-            </div>
-          </div>
-          <style>
-            .iris-rating-box {
-              background-color: navyblue !important;
-            }
-          </style>
-  `
-
-  return ratingHTML
 }

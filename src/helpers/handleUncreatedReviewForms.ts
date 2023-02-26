@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import fetch from "node-fetch"
+import { container } from "tsyringe"
 
 type TProps = {
   name: string
@@ -12,7 +13,8 @@ type TProps = {
   users: boolean | undefined
 }
 
-const prisma = new PrismaClient()
+const prisma: PrismaClient = container.resolve("PrismaClient")
+const apiLimit = 50
 
 export const handleUncreatedReviewForms = async (data: TProps) => {
   const store = await prisma.store.findFirst({
@@ -30,8 +32,7 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
     },
   })
 
-  const storeApiInfo: any = await new Promise((resolve, reject) => {
-    const apiLimit = 50
+  /*  const storeApiInfo: any = await new Promise((resolve, reject) => {
     fetch(
       "https://api.awsli.com.br/v1/pedido/search/?situacao_id=14&limit=50&format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
       {
@@ -69,7 +70,9 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
             resolve(data)
           })
       })
-  })
+  }) */
+
+  const storeApiInfo = await getLIApiData(0)
 
   const orderIds: number[] = []
   const orderIdsInDatabase: number[] = []
@@ -84,10 +87,8 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
   }
 
   for (let i = 0; i < storeApiInfo.objects.length; i++) {
-    console.log(orderIdsInDatabase, storeApiInfo.objects[i].numero)
     const check = orderIdsInDatabase.includes(storeApiInfo.objects[i].numero)
     if (check) {
-      console.log("checked")
       continue
     }
     orderIds.push(storeApiInfo.objects[i].numero)
@@ -107,18 +108,38 @@ export const handleUncreatedReviewForms = async (data: TProps) => {
   }
 
   return TEST__infoarray
+}
 
-  if (!store) {
-    return "ERROR: No store found with given parameters"
-  }
-
-  return store
+async function getLIApiData(offset: number) {
+  return await new Promise<any>((resolve) => {
+    fetch(
+      "https://api.awsli.com.br/v1/pedido/search/?situacao_id=14&limit=50&offset=" +
+        offset +
+        "&format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then(function (data) {
+        const remainingOrders = data.meta.total_count - (apiLimit + offset)
+        if (remainingOrders <= 0) {
+          resolve(data)
+        }
+        console.log(
+          "Iterating again in getLIApiData with remainingOrders: ",
+          remainingOrders
+        )
+        getLIApiData(apiLimit + offset)
+      })
+  })
 }
 
 async function createUncreatedRatings(orderId: number, storeInfo: any) {
-  console.log(storeInfo.cliente, "fetch1")
-  console.log(storeInfo.resource_uri, "fetch2")
-
   const clientInfo: any = await new Promise((resolve, reject) => {
     fetch(
       "https://api.awsli.com.br" +
@@ -156,8 +177,6 @@ async function createUncreatedRatings(orderId: number, storeInfo: any) {
         resolve(data)
       })
   })
-
-  console.log(orderInfo.itens[0], "fetch3")
 
   const apiProductInfo = orderInfo.itens[0].produto_pai
     ? orderInfo.itens[0].produto_pai
