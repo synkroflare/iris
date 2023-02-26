@@ -81,7 +81,7 @@ const photoImage = (url: string) => {
   return `
       <div style="height: 150px;">
         <a class='iris-rating-entry-image' onclick="handleImages(this)" style="cursor:pointer">
-          <img  src="${url}" style="height: 100%"/>
+          <img  src="${url}" style="height: 100%" loading="lazy"/>
         </a>
       </div>
       `
