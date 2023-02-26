@@ -82,7 +82,16 @@ export class ratingCreationHandler implements IRatingCreationHandler {
       })
   }) */
 
-    const storeApiInfo = await getLIApiData(0)
+    let storeApiData = await getLIApiData(0)
+    let storeApiInfo = storeApiData.data
+    let count = 0
+
+    while (storeApiData.remainingOrders > 0) {
+      count += apiLimit
+      storeApiData = await getLIApiData(count)
+      console.log("remaining: ", storeApiData.remainingOrders)
+      storeApiInfo += storeApiData.data
+    }
 
     const orderIds: number[] = []
     const orderIdsInDatabase: number[] = []
@@ -224,15 +233,8 @@ async function getLIApiData(offset: number) {
       .then((response) => response.json())
       .then(async function (data) {
         const remainingOrders = data.meta.total_count - (apiLimit + offset)
-        if (remainingOrders <= 0) {
-          resolve(data)
-        }
-        console.log(
-          "Iterating again in getLIApiData with remainingOrders: ",
-          remainingOrders
-        )
-        const newData = data + (await getLIApiData(apiLimit + offset))
-        resolve(newData)
+
+        resolve({ data: data, remainingOrders: remainingOrders })
       })
   })
 }
