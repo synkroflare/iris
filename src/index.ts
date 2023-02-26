@@ -149,7 +149,6 @@ startContainer().then(() => {
   app.patch("/product-reviews", async (req: Request, res: Response) => {
     try {
       const data = req.body
-
       const newReview = await prisma.review.update({
         where: {
           id: data.id,
