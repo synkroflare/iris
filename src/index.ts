@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client"
 import "dotenv/config"
 import express, { NextFunction, Request, Response } from "express"
+import * as fs from "fs"
+import https from "https"
 import "reflect-metadata"
 import { container } from "tsyringe"
 import { getHTMLContent } from "./helpers/getHTMLContent"
@@ -35,14 +37,14 @@ startContainer().then(() => {
   })
   app.use(express.json())
 
-  /*  const options = {
+  const options = {
     key: fs.readFileSync(
       "../../../etc/letsencrypt/live/alabarda.link/privkey.pem"
     ),
     cert: fs.readFileSync(
       "../../../etc/letsencrypt/live/alabarda.link/cert.pem"
     ),
-  } */
+  }
 
   const prisma: PrismaClient = container.resolve("PrismaClient")
   const ratingCreationHandlerInstance = new ratingCreationHandler(prisma)
@@ -162,7 +164,7 @@ startContainer().then(() => {
 
   app.listen(4000)
 
-  /*  https
+  https
     .createServer(options, app)
     .listen(3000, () =>
       console.log(
@@ -170,5 +172,4 @@ startContainer().then(() => {
           process.version
       )
     )
- */
 })
