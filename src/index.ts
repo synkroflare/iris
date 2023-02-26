@@ -1,14 +1,16 @@
 import { PrismaClient } from "@prisma/client"
 import "dotenv/config"
 import express, { NextFunction, Request, Response } from "express"
+import * as fs from "fs"
+import https from "https"
 import "reflect-metadata"
+import { container } from "tsyringe"
 import { getHTMLContent } from "./helpers/getHTMLContent"
-import { handleUncreatedReviewForms } from "./helpers/handleUncreatedReviewForms"
+import { ratingCreationHandler } from "./helpers/ratingCreationHandler"
 import { startContainer } from "./infra/container"
 
 startContainer().then(() => {
   const app = express()
-
   // Add headers before the routes are defined
   app.use(function (req: Request, res: Response, next: NextFunction) {
     // Website you wish to allow to connect
@@ -33,46 +35,25 @@ startContainer().then(() => {
     // Pass to next layer of middleware
     next()
   })
-
   app.use(express.json())
 
-  /* const options = {
-  key: fs.readFileSync(
-    "../../../etc/letsencrypt/live/alabarda.link/privkey.pem"
-  ),
-  cert: fs.readFileSync("../../../etc/letsencrypt/live/alabarda.link/cert.pem"),
-} */
+  const options = {
+    key: fs.readFileSync(
+      "../../../etc/letsencrypt/live/alabarda.link/privkey.pem"
+    ),
+    cert: fs.readFileSync(
+      "../../../etc/letsencrypt/live/alabarda.link/cert.pem"
+    ),
+  }
 
-  const prisma = new PrismaClient()
+  const prisma: PrismaClient = container.resolve("PrismaClient")
+  const ratingCreationHandlerInstance = new ratingCreationHandler(prisma)
 
   app.get("/", async (req: Request, res: Response) => {
     try {
-      const user = await prisma.user.findMany()
-      res.send(JSON.stringify(user))
+      res.send("Hello, welcome to Arauta!")
     } catch (error: any) {
-      res.send(error.message)
-    }
-  })
-
-  app.post("/user/create", async (req: Request, res: Response) => {
-    try {
-      const data = req.body
-      const user = await prisma.user.findFirst({
-        where: {
-          idInStore: data.idInStore,
-          storeId: data.storeId,
-        },
-      })
-      if (user) {
-        res.send("User already exists")
-      }
-      const newUser = await prisma.user.create({
-        data,
-      })
-
-      res.send(JSON.stringify(newUser))
-    } catch (error: any) {
-      res.send(error.message)
+      res.send("There was an error. Sorry ):")
     }
   })
 
@@ -136,7 +117,7 @@ startContainer().then(() => {
 
   app.post("/handle-new-ratings", async (req: Request, res: Response) => {
     try {
-      const response = await handleUncreatedReviewForms(req.body)
+      const response = await ratingCreationHandlerInstance.execute(req.body)
 
       res.send(JSON.stringify(response))
     } catch (error: any) {
@@ -181,14 +162,12 @@ startContainer().then(() => {
     }
   })
 
-  app.listen(4000)
-
-  /* https
-  .createServer(options, app)
-  .listen(3000, () =>
-    console.log(
-      "Arauta v0.0.3 https server online on 3000 and using node version " +
-        process.version
+  https
+    .createServer(options, app)
+    .listen(3000, () =>
+      console.log(
+        "Arauta v0.0.4 https server online on 3000 and using node version " +
+          process.version
+      )
     )
-  ) */
 })
