@@ -66,8 +66,8 @@ export const createRatingElement = (ratingData: any) => {
 
 const StarIcon = `<img
       src="https://www.svgrepo.com/show/407521/star.svg"
-      alt=""
-      style={{ height: "20px" }}
+      alt="star-icon"
+      style="height: 20px"
     />`
 
 const getStars = (rating: number) => {
