@@ -93,6 +93,8 @@ export class ratingCreationHandler implements IRatingCreationHandler {
       storeApiInfo += storeApiData.data
     }
 
+    console.log("progressing with remaining: ", storeApiData.remainingOrders)
+
     const orderIds: number[] = []
     const orderIdsInDatabase: number[] = []
     const storeApiInfoToCreate: any[] = []
