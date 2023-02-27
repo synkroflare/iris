@@ -77,7 +77,7 @@ startContainer().then(() => {
 
       const htmlObject = htmlObjects.htmlObject
       const starsHTMLObject = htmlObjects.starsHTMLObject
-
+      console.log("propfinding product reviews")
       res.send(
         JSON.stringify({
           reviews: reviews,
@@ -86,7 +86,8 @@ startContainer().then(() => {
         })
       )
     } catch (error: any) {
-      res.send(error.message)
+      console.log(error.message)
+      res.send("Error")
     }
   })
 
