@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 import "dotenv/config"
 import express, { NextFunction, Request, Response } from "express"
-import * as fs from "fs"
+import fs from "fs"
 import https from "https"
 import "reflect-metadata"
 import { container } from "tsyringe"
@@ -61,7 +61,7 @@ startContainer().then(() => {
     try {
       const data = req.body
 
-      /*   const store = await prisma.store.findFirst({
+      const store = await prisma.store.findFirst({
         where: {
           id: data.storeId,
         },
@@ -72,6 +72,9 @@ startContainer().then(() => {
       }
 
       const newVisitsObject: any = store.visits
+      if (!newVisitsObject[data.productInfo]) {
+        newVisitsObject[data.productInfo] = 0
+      }
       newVisitsObject[data.productInfo] += 1
 
       const visitUpdate = await prisma.store.update({
@@ -89,7 +92,7 @@ startContainer().then(() => {
         }. Count is: ${
           store.visits ? (store.visits as any)[data.productInfo] : ""
         }`
-      ) */
+      )
 
       const reviews = await prisma.review.findMany({
         where: {
