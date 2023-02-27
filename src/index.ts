@@ -60,6 +60,37 @@ startContainer().then(() => {
   app.propfind("/product-reviews", async (req: Request, res: Response) => {
     try {
       const data = req.body
+
+      const store = await prisma.store.findFirst({
+        where: {
+          id: data.storeId,
+        },
+      })
+
+      if (!store) {
+        throw new Error("No store found.")
+      }
+
+      const newVisitsObject: any = store.visits
+      newVisitsObject[data.productInfo] += 1
+
+      const visitUpdate = await prisma.store.update({
+        where: {
+          id: data.storeId,
+        },
+        data: {
+          visits: newVisitsObject,
+        },
+      })
+
+      console.log(
+        `New visit on product: ${data.productInfo}, in store: ${
+          store.name
+        }. Count is: ${
+          store.visits ? (store.visits as any)[data.productInfo] : ""
+        }`
+      )
+
       const reviews = await prisma.review.findMany({
         where: {
           id: data.id,
