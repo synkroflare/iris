@@ -61,7 +61,7 @@ startContainer().then(() => {
     try {
       const data = req.body
 
-      const store = await prisma.store.findFirst({
+      /*   const store = await prisma.store.findFirst({
         where: {
           id: data.storeId,
         },
@@ -89,7 +89,7 @@ startContainer().then(() => {
         }. Count is: ${
           store.visits ? (store.visits as any)[data.productInfo] : ""
         }`
-      )
+      ) */
 
       const reviews = await prisma.review.findMany({
         where: {
