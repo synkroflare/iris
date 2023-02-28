@@ -195,8 +195,6 @@ startContainer().then(() => {
     }
   })
 
-  app.listen(4000)
-
   https
     .createServer(options, app)
     .listen(3000, () =>
