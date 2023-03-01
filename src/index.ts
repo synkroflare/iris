@@ -60,7 +60,6 @@ startContainer().then(() => {
   app.propfind("/product-reviews", async (req: Request, res: Response) => {
     try {
       const data = req.body
-
       const store = await prisma.store.findFirst({
         where: {
           id: data.storeId,
@@ -119,8 +118,7 @@ startContainer().then(() => {
         })
       )
     } catch (error: any) {
-      console.log(error.message)
-      res.send("Error")
+      res.send(error.message)
     }
   })
 
