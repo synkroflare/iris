@@ -66,32 +66,30 @@ startContainer().then(() => {
         },
       })
 
-      if (!store) {
-        throw new Error("No store found.")
+      if (store) {
+        const newVisitsObject: any = store.visits
+        if (!newVisitsObject[data.productInfo]) {
+          newVisitsObject[data.productInfo] = 0
+        }
+        newVisitsObject[data.productInfo] += 1
+
+        const visitUpdate = await prisma.store.update({
+          where: {
+            id: data.storeId,
+          },
+          data: {
+            visits: newVisitsObject,
+          },
+        })
+
+        console.log(
+          `New visit on product: ${data.productInfo}, in store: ${
+            store.name
+          }. Count is: ${
+            store.visits ? (store.visits as any)[data.productInfo] : ""
+          }`
+        )
       }
-
-      const newVisitsObject: any = store.visits
-      if (!newVisitsObject[data.productInfo]) {
-        newVisitsObject[data.productInfo] = 0
-      }
-      newVisitsObject[data.productInfo] += 1
-
-      const visitUpdate = await prisma.store.update({
-        where: {
-          id: data.storeId,
-        },
-        data: {
-          visits: newVisitsObject,
-        },
-      })
-
-      console.log(
-        `New visit on product: ${data.productInfo}, in store: ${
-          store.name
-        }. Count is: ${
-          store.visits ? (store.visits as any)[data.productInfo] : ""
-        }`
-      )
 
       const reviews = await prisma.review.findMany({
         where: {
