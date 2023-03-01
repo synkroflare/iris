@@ -67,6 +67,7 @@ startContainer().then(() => {
       })
 
       if (data.storeId && store) {
+        console.log(data.storeId)
         const newVisitsObject: any = store.visits
         if (!newVisitsObject[data.productInfo]) {
           newVisitsObject[data.productInfo] = 0
