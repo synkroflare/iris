@@ -30,7 +30,7 @@ export const getHTMLContent = async (objects: reviews[]) => {
         display: flex;
         flex-direction: column;
         gap: 20px;
-        width: 70%;
+        max-width: 1200px;
         margin: 50px auto;
         position: relative;
         overflow: hidden;
