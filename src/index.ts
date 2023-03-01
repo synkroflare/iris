@@ -67,7 +67,7 @@ startContainer().then(() => {
       })
 
       if (!data.productInfo) {
-        console.log(req)
+        console.log("undefined from: ", req.originalUrl)
       }
 
       if (data.storeId && store) {
