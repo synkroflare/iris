@@ -155,7 +155,7 @@ startContainer().then(() => {
 
       res.send(JSON.stringify(response))
     } catch (error: any) {
-      res.send(error.message)
+      res.send([error.message, error])
     }
   })
 

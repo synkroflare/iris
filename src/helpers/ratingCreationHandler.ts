@@ -50,7 +50,9 @@ export class ratingCreationHandler implements IRatingCreationHandler {
       count += apiLimit
       storeApiData = await getLIApiData(count)
       console.log("remaining: ", storeApiData.remainingOrders)
-      storeApiInfo += storeApiData.data
+      storeApiInfo.objects = storeApiInfo.objects.concat(
+        storeApiData.data.objects
+      )
     }
 
     if (!store) {
@@ -70,8 +72,6 @@ export class ratingCreationHandler implements IRatingCreationHandler {
     ) {
       orderIdsInDatabase.push(store?.reviews[i].reviewIdInStore!)
     }
-
-    console.log("check1:", storeApiInfo)
 
     for (let i = 0; i < storeApiInfo.objects.length; i++) {
       const check = orderIdsInDatabase.includes(storeApiInfo.objects[i].numero)
