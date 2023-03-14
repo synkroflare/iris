@@ -42,46 +42,6 @@ export class ratingCreationHandler implements IRatingCreationHandler {
       },
     })
 
-    /*  const storeApiInfo: any = await new Promise((resolve, reject) => {
-    fetch(
-      "https://api.awsli.com.br/v1/pedido/search/?situacao_id=14&limit=50&format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then(function (data) {
-        const offset = data.meta.total_count - apiLimit
-        if (offset <= 0) {
-          resolve(data)
-          return
-        }
-
-        console.log("going to the next get request")
-
-        fetch(
-          "https://api.awsli.com.br/v1/pedido/search/?situacao_id=14&limit=50&offset=" +
-            offset +
-            "&format=json&chave_api=aaba145ba78dc7524820&chave_aplicacao=92fae45b-dd41-46c2-ac0d-840642d6982a",
-          {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((response) => response.json())
-          .then(function (data) {
-            resolve(data)
-          })
-      })
-  }) */
-
     let storeApiData = await getLIApiData(0)
     let storeApiInfo = storeApiData.data
     let count = 0
@@ -92,6 +52,8 @@ export class ratingCreationHandler implements IRatingCreationHandler {
       console.log("remaining: ", storeApiData.remainingOrders)
       storeApiInfo += storeApiData.data
     }
+
+    console.log("store:", store)
 
     console.log("progressing with remaining: ", storeApiData.remainingOrders)
 
