@@ -53,7 +53,11 @@ export class ratingCreationHandler implements IRatingCreationHandler {
       storeApiInfo += storeApiData.data
     }
 
-    console.log("store:", store)
+    if (!store) {
+      throw new Error("no store found.")
+    }
+
+    console.log("check1:", store.reviews !== undefined)
 
     console.log("progressing with remaining: ", storeApiData.remainingOrders)
 
