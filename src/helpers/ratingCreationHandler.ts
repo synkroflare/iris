@@ -57,8 +57,6 @@ export class ratingCreationHandler implements IRatingCreationHandler {
       throw new Error("no store found.")
     }
 
-    console.log("check1:", store.reviews !== undefined)
-
     console.log("progressing with remaining: ", storeApiData.remainingOrders)
 
     const orderIds: number[] = []
@@ -72,6 +70,8 @@ export class ratingCreationHandler implements IRatingCreationHandler {
     ) {
       orderIdsInDatabase.push(store?.reviews[i].reviewIdInStore!)
     }
+
+    console.log("check1:", storeApiInfo)
 
     for (let i = 0; i < storeApiInfo.objects.length; i++) {
       const check = orderIdsInDatabase.includes(storeApiInfo.objects[i].numero)
